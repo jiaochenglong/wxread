@@ -3,7 +3,8 @@ name: wxread
 on:
   schedule:
     - cron: '0 16 * * *'  # 北京时间 0:00 启动（UTC 时间 16:00）
-  workflow_dispatch:  # 手动触发
+    - cron: '0 4 * * *'   # 北京时间 12:00 启动（UTC 时间 4:00） 随机两次
+  workflow_dispatch:      # 手动触发
 
 jobs:
   deploy:
