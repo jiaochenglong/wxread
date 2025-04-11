@@ -7,8 +7,9 @@ import re
 默认使用本地值如果不存在从环境变量中获取值
 """
 
-# 阅读次数 默认40次/20分钟
-READ_NUM = int(os.getenv('READ_NUM') or 40)
+
+# 阅读次数(每次30秒)
+READ_NUM = 2*60
 # 需要推送时可选，可选pushplus、wxpusher、telegram
 PUSH_METHOD = "" or os.getenv('PUSH_METHOD')
 # pushplus推送时需填
@@ -19,58 +20,78 @@ TELEGRAM_CHAT_ID = "" or os.getenv("TELEGRAM_CHAT_ID")
 # wxpusher推送时需填
 WXPUSHER_SPT = "" or os.getenv("WXPUSHER_SPT")
 # read接口的bash命令，本地部署时可对应替换headers、cookies
-curl_str = os.getenv('WXREAD_CURL_BASH')
+curl_str = ''''''
 
 # headers、cookies是一个省略模版，本地或者docker部署时对应替换
-cookies = {
-    'RK': '/U1VY/LPdb',
-    'ptcz': 'feb3de917f87400787fbf5934e2b46b5466545f34bf8a5c7adbdc5bc8ab371ae',
-    'wr_avatar': 'https%3A%2F%2Fthirdwx.qlogo.cn%2Fmmopen%2Fvi_32%2FQ0j4TwGTfTI51cu6AvvQV8cIicf5ezL7PjKjTdrgTss6icXBsJSibTykIkMTGQzI0QxHDKs4KbKOmrUxbjC9u9ZVQ%2F132',
-    'wr_gender': '1',
-}
+cookies = {}
+headers = {}
 
-headers = {
-    'accept': 'application/json, text/plain, */*',
-    'accept-language': 'zh-CN,zh;q=0.9',
-    'baggage': 'sentry-environment=production,sentry-release=dev-1743523268690,sentry-public_key=ed67ed71f7804a038e898ba54bd66e44,sentry-trace_id=f28b984c208449548d5d2b40dc3d3876',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36',
-}
-
-# 书籍
-book = [
-    "36d322f07186022636daa5e","6f932ec05dd9eb6f96f14b9","43f3229071984b9343f04a4","d7732ea0813ab7d58g0184b8",
-    "3d03298058a9443d052d409","4fc328a0729350754fc56d4","a743220058a92aa746632c0","140329d0716ce81f140468e",
-    "1d9321c0718ff5e11d9afe8","ff132750727dc0f6ff1f7b5","e8532a40719c4eb7e851cbe","9b13257072562b5c9b1c8d6"
-]
-
-# 章节
-chapter = [
-    "ecc32f3013eccbc87e4b62e","a87322c014a87ff679a21ea","e4d32d5015e4da3b7fbb1fa","16732dc0161679091c5aeb1",
-    "8f132430178f14e45fce0f7","c9f326d018c9f0f895fb5e4","45c322601945c48cce2e120","d3d322001ad3d9446802347",
-    "65132ca01b6512bd43d90e3","c20321001cc20ad4d76f5ae","c51323901dc51ce410c121b","aab325601eaab3238922e53",
-    "9bf32f301f9bf31c7ff0a60","c7432af0210c74d97b01b1c","70e32fb021170efdf2eca12","6f4322302126f4922f45dec"
-]
 
 """
 建议保留区域|默认读三体，其它书籍自行测试时间是否增加
 """
-data = {
-    "appId": "wb182564874603h266381671",
-    "b": "ce032b305a9bc1ce0b0dd2a",
-    "c": "7f632b502707f6ffaa6bf2e",
-    "ci": 27,
-    "co": 389,
-    "sm": "19聚会《三体》网友的聚会地点是一处僻静",
-    "pr": 74,
-    "rt": 15,
-    "ts": 1744264311434,
-    "rn": 466,
-    "sg": "2b2ec618394b99deea35104168b86381da9f8946d4bc234e062fa320155409fb",
-    "ct": 1744264311,
-    "ps": "b1b32fa07a65893cg017095",
-    "pc": "30732cc07a65893cg019b2f",
-    "s": "36cc0815"
+data ={
+  "appId": "wb182564874663h152492176",
+  "b": "ce032b305a9bc1ce0b0dd2a",
+  "c": "7cb321502467cbbc409e62d",
+  "ci": 70,
+  "co": 0,
+  "sm": "[插图]第三部广播纪元7年，程心艾AA说",
+  "pr": 74,
+  "rt": 30,
+  "ts": 1727660516749,
+  "rn": 31,
+  "sg": "991118cc229871a5442993ecb08b5d2844d7f001dbad9a9bc7b2ecf73dc8db7e",
+  "ct": 1727660516,
+  "ps": "b1d32a307a4c3259g016b67",
+  "pc": "080327b07a4c3259g018787",
+  "s": "44f82a10"
 }
+
+# 章节内位置，对应参数co
+cos = [389,609,745,803,981,1154]
+
+# 章节目录，每个数组内参数依次为ci、c、pr
+# 这里的书籍是三体，参数b="ce032b305a9bc1ce0b0dd2a"
+chapters = [
+    [9,  "f4b32ef025ef4b9ec30acd6", 1],
+    [10, "81232fb025f812b4ba28a23", 1],
+    [11, "2663284026026657d5ffeed", 1],
+    [12, "e2e329c0261e2ef524fbf75", 1],
+    [13, "ed332ca0262ed3d2c2191f2", 1],
+    [14, "ac6325b0263ac627ab1c3dd", 3],
+    [15, "f8932dd0264f899139df0ae", 4],
+    [16, "38b3252026538b3eff8b041", 4],
+    [17, "ec8325e0266ec89566376b5", 4],
+    [18, "697324802676974ce5aceab", 4],
+    [19, "c9e32940268c9e1074f5bc6", 7],
+    [20, "65b326f026965b9eea6e6e1", 7],
+    [21, "f09320f026af0935e4cd23d", 7],
+    [22, "a973204026ba97da629bd12", 7],
+    [23, "a3c320b026ca3c65c297000", 9],
+    [24, "272329d026d2723d092b535", 9],
+    [25, "5f9323e026e5f93f9835418", 9],
+    [26, "6983268026f698d51a198ff", 11],
+    [27, "7f632b502707f6ffaa6bf2e", 11],
+    [28, "7323297027173278a4a8f1d", 11],
+    [29, "5fd32dd02725fd0b37cd75e", 11],
+    [30, "2b4324802732b44928aee17", 11],
+    [31, "c45328f0274c45147dee704", 11],
+    [32, "eb132680275eb160de1d35c", 11],
+    [33, "5ef32bd02765ef0599381f7", 11],
+    [34, "07e323f027707e1cd7dc674", 11],
+    [35, "da432420278da4fb5c6e9ad", 15],
+    [36, "4c5327a02794c56ff4ce24c", 15],
+    [37, "a0a32dd027aa0a080f42962", 15],
+    [38, "2023270027b202cb962a56f", 15],
+    [39, "c8f3245027cc8ffe9a588b8", 15],
+    [40, "3de32dd027d3def184ad06e", 15],
+    [41, "06932ec027e069059b7e512", 15],
+    [42, "ec532f2027fec5decca5182", 15],
+    [43, "76d325c028076dc611d6d8c", 15],
+    [44, "d1f32250281d1f491a40045", 15],
+    [45, "9b832a602829b86192511b5", 15]
+]
 
 
 def convert(curl_command):
