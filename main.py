@@ -12,7 +12,9 @@ from config import data, headers, cookies, READ_NUM, PUSH_METHOD, book, chapter
 
 # 配置日志格式
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)-8s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format='%(asctime)s - %(levelname)-8s - %(message)s'
+)
 
 # 加密盐及其它默认值
 KEY = "3c5c8717f3daf09iop3423zafeqoi"
@@ -23,7 +25,9 @@ RENEW_URL = "https://weread.qq.com/web/login/renewal"
 
 def encode_data(data):
     """数据编码"""
-    return '&'.join(f"{k}={urllib.parse.quote(str(data[k]), safe='')}" for k in sorted(data.keys()))
+    return '&'.join(
+        f"{k}={urllib.parse.quote(str(data[k]), safe='')}" for k in sorted(data.keys())
+    )
 
 
 def cal_hash(input_string):
@@ -34,8 +38,12 @@ def cal_hash(input_string):
     _19094e = length - 1
 
     while _19094e > 0:
-        _7032f5 = 0x7fffffff & (_7032f5 ^ ord(input_string[_19094e]) << (length - _19094e) % 30)
-        _cc1055 = 0x7fffffff & (_cc1055 ^ ord(input_string[_19094e - 1]) << _19094e % 30)
+        _7032f5 = 0x7FFFFFFF & (
+            _7032f5 ^ ord(input_string[_19094e]) << (length - _19094e) % 30
+        )
+        _cc1055 = 0x7FFFFFFF & (
+            _cc1055 ^ ord(input_string[_19094e - 1]) << _19094e % 30
+        )
         _19094e -= 2
 
     return hex(_7032f5 + _cc1055)[2:].lower()
@@ -43,14 +51,16 @@ def cal_hash(input_string):
 
 def get_wr_skey():
     """刷新cookie密钥"""
-    response = requests.post(RENEW_URL, headers=headers, cookies=cookies,
-                             data=json.dumps(COOKIE_DATA, separators=(',', ':')))
+    response = requests.post(
+        RENEW_URL,
+        headers=headers,
+        cookies=cookies,
+        data=json.dumps(COOKIE_DATA, separators=(',', ':')),
+    )
     for cookie in response.headers.get('Set-Cookie', '').split(';'):
         if "wr_skey" in cookie:
             return cookie.split('=')[-1][:8]
     return None
-
-
 
 
 index = 1
@@ -68,7 +78,12 @@ while index <= READ_NUM:
     data['s'] = cal_hash(encode_data(data))
 
     logging.info(f"⏱️ 尝试第 {index} 次阅读...")
-    response = requests.post(READ_URL, headers=headers, cookies=cookies, data=json.dumps(data, separators=(',', ':')))
+    response = requests.post(
+        READ_URL,
+        headers=headers,
+        cookies=cookies,
+        data=json.dumps(data, separators=(',', ':')),
+    )
     resData = response.json()
 
     if 'succ' in resData:
