@@ -23,8 +23,37 @@ WXPUSHER_SPT = "" or os.getenv("WXPUSHER_SPT")
 curl_str = ''''''
 
 # headers、cookies是一个省略模版，本地或者docker部署时对应替换
-cookies = {}
-headers = {}
+cookies = {
+    'wr_fp': '200769212',
+    'wr_gid': '251049617',
+    'wr_vid': '17904611',
+    'wr_skey': 'XDYtehrI',
+    'wr_pf': '0',
+    'wr_rt': 'web%40rU4PHS5brL1b9PWdZeu_AL',
+    'wr_localvid': '4b8327f0711133e34b84c1f',
+    'wr_name': 'Charlie',
+    'wr_avatar': 'https%3A%2F%2Fres.weread.qq.com%2Fwravatar%2FWV0010-IMOW_s1Y7fwyHB16rCT1jf3%2F0',
+    'wr_gender': '1',
+}
+
+headers = {
+    'accept': 'application/json, text/plain, */*',
+    'accept-language': 'zh-CN,zh;q=0.9',
+    'baggage': 'sentry-environment=production,sentry-release=dev-1744355656859,sentry-public_key=ed67ed71f7804a038e898ba54bd66e44,sentry-trace_id=222c4aae89834a70a1e1755029e8b574',
+    'content-type': 'application/json;charset=UTF-8',
+    'origin': 'https://weread.qq.com',
+    'priority': 'u=1, i',
+    'referer': 'https://weread.qq.com/web/reader/ce032b305a9bc1ce0b0dd2a',
+    'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'sentry-trace': '222c4aae89834a70a1e1755029e8b574-b025be8236957e1b',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+    # 'cookie': 'wr_fp=200769212; wr_gid=251049617; wr_vid=17904611; wr_skey=XDYtehrI; wr_pf=0; wr_rt=web%40rU4PHS5brL1b9PWdZeu_AL; wr_localvid=4b8327f0711133e34b84c1f; wr_name=Charlie; wr_avatar=https%3A%2F%2Fres.weread.qq.com%2Fwravatar%2FWV0010-IMOW_s1Y7fwyHB16rCT1jf3%2F0; wr_gender=1',
+}
 
 
 """
