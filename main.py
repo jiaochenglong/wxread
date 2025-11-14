@@ -66,7 +66,7 @@ def refresh_cookie():
         logging.error(ERROR_CODE)
         push(ERROR_CODE, PUSH_METHOD)
         raise Exception(ERROR_CODE)
-
+ 
 refresh_cookie()
 index = 1
 lastTime = int(time.time()) - 30
