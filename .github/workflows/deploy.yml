@@ -4,25 +4,25 @@ on:
   schedule:
     - cron: '47 15 * * *'  # 北京时间 23:47（UTC 时间 15:47）
     - cron: '47 8 * * *'   # 北京时间 16:47（UTC 时间 08:47）
-  workflow_dispatch:      # 手动触发
+  workflow_dispatch:       # 支持手动触发测试
 
 jobs:
   deploy:
     runs-on: ubuntu-22.04
-    environment: AutoRead  # 指定环境
+    # 如果你没在 Settings -> Environments 里创建 AutoRead，请删除下面这一行
+    environment: AutoRead  
 
     steps:
-
     - name: Set DNS to Google's DNS
       run: |
         echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
         echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
@@ -31,33 +31,37 @@ jobs:
         python -m pip install --upgrade pip
         pip install certifi==2024.8.30 charset-normalizer==3.4.0 idna==3.10 requests==2.32.3 urllib3==2.2.3
 
-    - name: Random delay between 0-10 minutes
+    - name: Random delay
+      # 仅在定时触发时延迟，手动触发时不延迟以便快速看到效果
+      if: github.event_name != 'workflow_dispatch'
       run: |
-        DELAY=$((RANDOM % 1)) # 生成 0 到 10 分钟的随机延迟（单位：分钟）
-        echo "Delaying for $DELAY minutes..."
-        sleep $((DELAY * 60)) # 转换为秒并等待
+        DELAY=$((RANDOM % 11)) 
+        echo "Scheduled task: Delaying for $DELAY minutes..."
+        sleep $((DELAY * 60))
 
-    - name: Generate random READ_NUM based on schedule
+    - name: Generate READ_NUM
       run: |
-        # 注意：READ_NUM 的单位不是分钟，1 = 30 秒
-        if [[ "${{ github.event.schedule }}" == "47 15 * * *" ]]; then
-          # 23:47 任务，运行 4小时50分-5小时50分（290-350分钟，580~700次）
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          # 【手动触发测试用】设置为 2 次（约 1 分钟），确保能快速走完流程并触发推送
+          RANDOM_NUM=2
+          echo "Manual trigger: Running quick test (1 min)."
+        elif [[ "${{ github.event.schedule }}" == "47 15 * * *" ]]; then
+          # 23:47 任务：约 290-350 分钟
           RANDOM_NUM=$((RANDOM % 121 + 580))
         else
-          # 16:47 任务，运行 2小时-3小时（120-180分钟，240~360次）
+          # 16:47 任务：约 120-180 分钟
           RANDOM_NUM=$((RANDOM % 121 + 240))
         fi
         echo "READ_NUM=$RANDOM_NUM" >> $GITHUB_ENV
-        echo "Running for $((RANDOM_NUM * 30 / 60)) minutes"
+        echo "Target duration: $((RANDOM_NUM * 30 / 60)) minutes."
 
     - name: Run deployment script
       env:
+        # 以下变量请确保已在 GitHub Secrets 中正确配置
         WXREAD_CURL_BASH: ${{ secrets.WXREAD_CURL_BASH }}
-        PUSH_METHOD: ${{ secrets.PUSH_METHOD }}
-        PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-        WXPUSHER_SPT: ${{ secrets.WXPUSHER_SPT }}
+        PUSH_METHOD: 'telegram' # 强制指定为 telegram 进行测试，或使用 ${{ secrets.PUSH_METHOD }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        READ_NUM: ${{ env.READ_NUM }}  # 使用随机生成的 READ_NUM
+        READ_NUM: ${{ env.READ_NUM }}
       run: |
         python main.py
