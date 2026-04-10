@@ -47,23 +47,22 @@ cookies = {
 headers = {
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
-    'baggage': 'sentry-environment=production,sentry-release=dev-1770724961596,sentry-public_key=ed67ed71f7804a038e898ba54bd66e44,sentry-trace_id=a9eae182337843e098ee4ad2fc74378b',
+    'baggage': 'sentry-environment=production,sentry-release=dev-1770724961596,sentry-public_key=ed67ed71f7804a038e898ba54bd66e44,sentry-trace_id=67e5e6144d0a43809401dfc81ab9173e',
     'content-type': 'application/json;charset=UTF-8',
     'origin': 'https://weread.qq.com',
     'priority': 'u=1, i',
-    'referer': 'https://weread.qq.com/web/reader/20e32f20813abb43fg01262c',
+    'referer': 'https://weread.qq.com/web/reader/ce032b305a9bc1ce0b0dd2ak65b326f026965b9eea6e6e1',
     'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"Windows"',
     'sec-fetch-dest': 'empty',
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
-    'sentry-trace': 'a9eae182337843e098ee4ad2fc74378b-8e0b68c64a556b72',
+    'sentry-trace': '67e5e6144d0a43809401dfc81ab9173e-b22d38121c0ad3eb',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
-    'x-wrpa-0': 'c65674eec2bdf6051b7a4a28430c187ba9f7c284edc6be3b1935f0931edb146bc5a482543942b001588a6cfa54c5e5158ffa2a116603427797dd6da101444bdd,JGphRipvaVdlVsOzRMKow7gXNigcwp4JHyHCjTlfwq4IJsKIQcK0wqfDj8KLLGd8w6XDlcKSWCvCulvDucKcwqzDgMKnwqZ+T8KdwqHCjlIqw5TDk8OqFcOWwqbCp8KwJ0lzwqLDplozVEPDmsKwwrhCdMO0HArDhF3DrG7CvsOEwojCm1cLwo3CusORUSjDvcO5w6oPw4jCoMOAwpDCrcOtwr3DvMOiwr3CuEHCl8K6w54HEldQbsOKwonDhcOaPAjChMK3w6Q0wqrChkIww53Cpyhrw5rCuBdiwqPDiMK5NG/DpMOow7krX8K8wr4qR8KGwpfDgk/DgWYXc8OWwqnDrz1mfHlRwopLWsKIw4PDqhTClsOsRRPDgj9rRMKow5nDqMKew6nCo0ZVwp5OBmPCjGMYw7owWMOkdSI9wrk1wrnDgcOSQDRUVsOUfMOFw6IhOMOSMz1mYcO1OsOqaBjDsjLDksOYwozDjn7ChMOawq7DhjMYw7wCw5DChsKK,WntILW5YXcOOw4BWH2PDr8KmBH3Cn8KTw57DqB3Dq8KMXXwZVGHDmMK5G15HasOScsKjw61aw4VxZHfCph55Q8KvdMOWBsO8EVgRamVlXsOvwrocwp7CmsOcw5tLwp1ZOTZnOxVJHUfDgDBzekHDsnTCkHENYHrDkX3CkAIHw68jw4zDj1rCtxpfU8K5w4TCkF3CjcOzaTE=',
+    'x-wrpa-0': '16484139e9f79959ffd4ccb0e7a4a8460d5a275e560b5e70f01cda293731473a76d9a0c711314505aa08f9ebc17a2c1d526949382741830526843aa1ffd9ae73,MUZ5eTgoWUZlVsOzRMKow7gXNigcwp5wTXDCjTnCisKGWhbCiEHCtMKgGCTDviR8w7XDu8KVwoxnwpJ0fiMWw6bCp8Kmfk/CncKhwo5SKsOUw5PCtsOHw4fCpsKnZT/Dm8KDwqLDplozwoHDvCrCsMK4QnTDtMOJZsOcw6LDq8KBw7TDgsKIwptXC8KNwrrDkVEow73DucK2w53DmcKgw4BFwrV/TcO8w6LCvcK4VMKoworDngcSV1DCu8KmwpF6w53Dk8O6w4ZNwozCkcKSW8KkD0zDssOefMOMw4pSw6Asw5kDw4bDr1zCmsO5w6TDgVlow7YEQ8KEwolcw5MmbDPCmFR+w7sDL8KXwqBqwrfCnR3DtcK9woLDhMOJw6c8KB1PA8OKYsOBw7RcVwpmwrYzwpDDtW3CoEYmC8OBScKiw4V9SR/CizIocMKgwq7CucK9W8OAZ3kiH0Zbw58WwrZhwrcew5Zww7kIMMKywp/CuyZKAMOAXT3DiMO6w5PC,mWTDiGg8w5FLS8OqwoLDhhHDpMOdaxjCtWvChAh0w4pqwoc/E8ONw7vDrMKtUMKmwpvDgXRRwrw/aMOTUsO4wrfDrcODfsKfwoDCv8K8wqc6w43CrcOfwqtSw4wxwqdlcMKScMKoTF/CpsK0wqDDoMO+YH3CrMK0cAlycjFNw749BCLCkcO8WhFhHcKdKXXCt3nCngLDuRk+UzLCmsOJwrQ3Pg3DgjtUAD9iSsOjf8KrGUw1FjDClRFFS3FHDzrCt1UsTcKPwppfwoc=',
     # 'cookie': 'RK=8b8IPkxLPX; ptcz=44866af3012d4100cd8d840d0a81f70af8ff7e8887a9105d266712edec417331; _clck=1xr709b|1|g2h|0; _qimei_uuid42=1a1080b2f391003f718dbc6784da2191eabd1748e4; _qimei_fingerprint=46d124002cf7d99787d08337dcd33c84; _qimei_i_3=27bc4ad19c08548d939eff62098270e7f3e7a4f3145c0a8ab7dd2b0d24c5246b336337943989e2949ebf; pgv_pvid=5185920880; wr_localvid=4b8327f0711133e34b84c1f; wr_name=Charlie; wr_avatar=https%3A%2F%2Fres.weread.qq.com%2Fwravatar%2FWV0010-IMOW_s1Y7fwyHB16rCT1jf3%2F0; wr_gender=1; _qpsvr_localtk=0.285836598468007; pgv_info=ssid=s9233582944; wr_gid=215214924; wr_skey=yWoj8bg7; wr_vid=17904611; wr_ql=0; wr_rt=web%40QaLP1~Rps6Jn9_ac1CI_AL; wr_fp=1878795642',
 }
-
 
 # 书籍
 book = [
