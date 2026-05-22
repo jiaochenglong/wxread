@@ -6,14 +6,10 @@ concurrency:
 
 on:
   schedule:
-    # 凌晨任务：北京时间每天 01:00（UTC 前一天 17:00）
-    - cron: '0 17 * * *'
-    # 早间任务：北京时间每天 05:00（UTC 前一天 21:00）
-    #- cron: '0 21 * * *'
-    # 午间任务：北京时间每天 11:40（UTC 03:40）
-    #- cron: '40 3 * * *'
-    # 晚间任务：北京时间每天 22:00（UTC 14:00）
-    #- cron: '0 14 * * *'
+    # 晚间任务：北京时间每天 23:47（UTC 时间 15:47）
+    - cron: '47 15 * * *'  
+    # 下午任务：北京时间每天 16:47（UTC 时间 08:47）
+    - cron: '47 8 * * *'   
   workflow_dispatch:  # 手动触发
 
 jobs:
@@ -29,10 +25,10 @@ jobs:
         echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
@@ -40,6 +36,30 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install certifi==2024.8.30 charset-normalizer==3.4.0 idna==3.10 requests==2.32.3 urllib3==2.2.3
+
+    - name: Random delay
+      # 仅在定时触发时延迟，手动触发时不延迟以便快速看到效果
+      if: github.event_name != 'workflow_dispatch'
+      run: |
+        DELAY=$((RANDOM % 11)) 
+        echo "Scheduled task: Delaying for $DELAY minutes..."
+        sleep $((DELAY * 60))
+
+    - name: Generate READ_NUM
+      run: |
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          # 【手动触发测试用】设置为 2 次（约 1 分钟），确保能快速走完流程并触发推送
+          RANDOM_NUM=2
+          echo "Manual trigger: Running quick test (1 min)."
+        elif [[ "${{ github.event.schedule }}" == "47 15 * * *" ]]; then
+          # 23:47 任务：约 290-350 分钟
+          RANDOM_NUM=$((RANDOM % 121 + 580))
+        else
+          # 16:47 任务：约 120-180 分钟
+          RANDOM_NUM=$((RANDOM % 121 + 240))
+        fi
+        echo "READ_NUM=$RANDOM_NUM" >> $GITHUB_ENV
+        echo "Target duration: $((RANDOM_NUM * 30 / 60)) minutes."
 
     - name: Run deployment script
       env:
@@ -50,7 +70,7 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         SERVERCHAN_SPT:  ${{ secrets.SERVERCHAN_SPT }}
-        READ_NUM: ${{ vars.READ_NUM }}  # 使用 Repository Variables
+        READ_NUM: ${{ env.READ_NUM }}  # 使用上一步动态生成的临时环境变量
 
       run: |
         python main.py
