@@ -1,5 +1,9 @@
 name: wxread
 
+# 提前启用 Node.js 24 环境，彻底消除 GitHub 的弃用警告
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 concurrency:
   group: ${{ github.workflow }} # 使用工作流名称作为并发组的key
   cancel-in-progress: true    # 取消任何正在进行的相同并发组的工作流
@@ -25,10 +29,10 @@ jobs:
         echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # 💡 升级到 v4，支持更高版本的 Node 环境
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5 # 💡 升级到 v5，全面兼容新版环境
       with:
         python-version: '3.10'
 
@@ -38,7 +42,7 @@ jobs:
         pip install certifi==2024.8.30 charset-normalizer==3.4.0 idna==3.10 requests==2.32.3 urllib3==2.2.3
 
     - name: Random delay
-      # 仅在定时触发时延迟，手动触发时不延迟以便快速看到效果
+      # 如果是手动触发 (workflow_dispatch)，则直接跳过此步骤，实现“直接启动、0延迟”
       if: github.event_name != 'workflow_dispatch'
       run: |
         DELAY=$((RANDOM % 11)) 
@@ -48,14 +52,14 @@ jobs:
     - name: Generate READ_NUM
       run: |
         if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-          # 【手动触发测试用】设置为 2 次（约 1 分钟），确保能快速走完流程并触发推送
+          # 手动触发测试用：强制设置为 2 次（对应脚本运行时间约为 1 分钟），快速结束并测试推送
           RANDOM_NUM=2
           echo "Manual trigger: Running quick test (1 min)."
         elif [[ "${{ github.event.schedule }}" == "47 15 * * *" ]]; then
-          # 23:47 任务：约 290-350 分钟
+          # 定时任务 23:47：约 290-350 分钟
           RANDOM_NUM=$((RANDOM % 121 + 580))
         else
-          # 16:47 任务：约 120-180 分钟
+          # 定时任务 16:47：约 120-180 分钟
           RANDOM_NUM=$((RANDOM % 121 + 240))
         fi
         echo "READ_NUM=$RANDOM_NUM" >> $GITHUB_ENV
@@ -70,7 +74,7 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         SERVERCHAN_SPT:  ${{ secrets.SERVERCHAN_SPT }}
-        READ_NUM: ${{ env.READ_NUM }}  # 使用上一步动态生成的临时环境变量
+        READ_NUM: ${{ env.READ_NUM }}  # 动态读取上一步生成的次数
 
       run: |
         python main.py
