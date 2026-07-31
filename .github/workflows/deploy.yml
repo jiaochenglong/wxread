@@ -29,10 +29,10 @@ jobs:
         echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
 
     - name: Checkout repository
-      uses: actions/checkout@v5 # 💡 升级到 v4，支持更高版本的 Node 环境
+      uses: actions/checkout@v5 # 💡 升级到 v5，支持更高版本的 Node 环境
 
     - name: Set up Python
-      uses: actions/setup-python@v6 # 💡 升级到 v5，全面兼容新版环境
+      uses: actions/setup-python@v6 # 💡 升级到 v6，全面兼容新版环境
       with:
         python-version: '3.10'
 
